@@ -8,7 +8,14 @@ var map = L.map('map', {zoomControl: false})
 //sadd basemap tiles from mapbox
 L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
    attribution: 'Map Tiles: Stamen Design &mdash; Map Data: OpenStreetMap &mdash; Source: US Census Bureau',
-    maxZoom: 18
+    maxZoom: 13,
+    minZoom: 4
+}).addTo(map);
+
+//add scale bar
+L.control.scale({
+  imperial: true,
+  metric: false
 }).addTo(map);
 
 
@@ -23,18 +30,108 @@ $('.close').on('click',function(){
   $('#mask').fadeOut(250);
 });
 
- 
-//Start_Date color
-function yearColor(d) {
-    return d == '2010'   ? '#eff3ff' :
-           d == '2011+'  ? '#c6dbef' :
-           d == '2011'   ? '#9ecae1' :
-           d == '2012+'  ? '#6baed6' :
-           d == '2012'   ? '#3182bd' :
-           d == '2013'   ? '#08519c' :
-                           '#FF00FF' ; 
-
+ function stateName(t) {
+  return t == 'AL'  ? 'Alabama' :
+        t ==  'AK'  ? 'Alaska'  :
+        t ==  'AZ'  ? 'Arizona' :
+        t ==  'AR'  ? 'Arkansas'  :
+        t ==  'CA'  ? 'California'  :
+        t ==  'CO'  ? 'Colorado'  :
+        t ==  'CT'  ? 'Connecticut' :
+        t ==  'DE'  ? 'Delaware'  :
+        t ==  'FL'  ? 'Florida' :
+        t ==  'GA'  ? 'Georgia' :
+        t ==  'HI'  ? 'Hawaii' :
+        t ==  'ID'  ? 'Idaho' :
+        t ==  'IL'  ? 'Illinois' :
+        t ==  'IN'  ? 'Indiana' :
+        t ==  'IA'  ? 'Iowa'  :
+        t ==  'KS'  ? 'Kansas'  :
+        t ==  'KY'  ? 'Kentucky'  :
+        t ==  'LA'  ? 'Louisiana' :
+        t ==  'ME'  ? 'Maine' :
+        t ==  'MD'  ? 'Maryland'  :
+        t ==  'MA'  ? 'Massachusetts' :
+        t ==  'MI'  ? 'Michigan'  :
+        t ==  'MN'  ? 'Minnesota' :
+        t ==  'MS'  ? 'Mississippi' :
+        t ==  'MO'  ? 'Missouri'  :
+        t ==  'MT'  ? 'Montana' :
+        t ==  'NE'  ? 'Nebraska'  :
+        t ==  'NV'  ? 'Nevada'  :
+        t ==  'NH'  ? 'New Hampshire' :
+        t ==  'NJ'  ? 'New Jersey'  :
+        t ==  'NM'  ? 'New Mexico'  :
+        t ==  'NY'  ? 'New York'  :
+        t ==  'NC'  ? 'North Carolina'  :
+        t ==  'ND'  ? 'North Dakota'  :
+        t ==  'OH'  ? 'Ohio'  :
+        t ==  'OK'  ? 'Oklahoma'  :
+        t ==  'OR'  ? 'Oregon'  :
+        t ==  'PA'  ? 'Pennsylvania'  :
+        t ==  'RI'  ? 'Rhode Island'  :
+        t ==  'SC'  ? 'South Carolina'  :
+        t ==  'SD'  ? 'South Dakota'  :
+        t ==  'TN'  ? 'Tennessee' :
+        t ==  'TX'  ? 'Texas' :
+        t ==  'UT'  ? 'Utah'  :
+        t ==  'VT'  ? 'Vermont' :
+        t ==  'VA'  ? 'Virginia'  :
+        t ==  'WA'  ? 'Washington'  :
+        t ==  'WV'  ? 'West Virginia' :
+        t ==  'WI'  ? 'Wisconsin' :
+        t ==  'WY'  ? 'Wyoming' :
+                      'DC' ;
 }
+
+
+//Start_Date color
+// function yearColor(d) {
+//     return d == '2010'   ? '#eff3ff' :
+//            d == '2011+'  ? '#c6dbef' :
+//            d == '2011'   ? '#9ecae1' :
+//            d == '2012+'  ? '#6baed6' :
+//            d == '2012'   ? '#3182bd' :
+//            d == '2013'   ? '#08519c' :
+//                            '#FF00FF' ; 
+
+// }
+
+//Rekha said make year gray
+// function yearColor(d) {
+//     return d == '2010'   ? '#f7f7f7' :
+//            d == '2011+'  ? '#d9d9d9' :
+//            d == '2011'   ? '#D1D1D1' :
+//            d == '2012+'  ? '#969696' :
+//            d == '2012'   ? '#636363' :
+//            d == '2013'   ? '#252525' :
+//                            '#FF00FF' ; 
+
+// }
+
+//this is what gray legend looks like
+function yearColor(d) {
+    return d == '2010'   ? '#F9F9F9' :
+           d == '2011+'  ? '#E4E4E4' :
+           d == '2011'   ? '#D1D1D1' :
+           d == '2012+'  ? '#B5B5B5' :
+           d == '2012'   ? '#929292' :
+           d == '2013'   ? '#666666' :
+                           '#FF00FF' ; 
+}
+
+//3/22/15: adding a new version of yearColor that ignores the +. Rekha requested this. 
+//         but she wants to be able to switch back to the other version too. So I'll keep that code
+function yearColorShort(d) {
+    return d == '2010'   ? '#f7f7f7' :
+           d == '2011+'  ? '#cccccc' :
+           d == '2011'   ? '#cccccc' :
+           d == '2012+'  ? '#969696' :
+           d == '2012'   ? '#969696' :
+           d == '2013'   ? '#525252' :
+                           '#FF00FF' ; 
+}
+
 
 //cluster recruitment color
 function binaryColor(d) {
@@ -45,17 +142,18 @@ function binaryColor(d) {
 
 //cluster recruitment weight
 function getWeight(d) {
-    return d == '0' ? .5 :
-           d == '1' ? 3 :
+    return d == '0' ? 2 :
+           d == '1' ? 4 :
                       5 ;
 }
 
 
 function yesNo(v) {
-  return v == '0' ? "no"  :
-         v == '1' ? "yes" :
+  return v == '0' ? "No"  :
+         v == '1' ? "Yes" :
                     "BAD VALUE";
 }
+
 
 // function countLottery(a, b) {
 //     return a * b;
@@ -76,24 +174,26 @@ function yesNo(v) {
 // }
 
     //load geojson and style by data
-    $.getJSON('data/schoolsfull.geojson',function(data){
+    $.getJSON('CT/schoolswithgrant.geojson',function(data){
         var geojsonLayer = L.geoJson(data.features, {
             pointToLayer: function (feature, latlng) {
 
                 //circle
                 var marker = L.circleMarker(latlng, {
-                    radius: 9,
-                    fillColor: yearColor(feature.properties.Start_Date),
+                    radius: 12,
+                    fillColor: yearColorShort(feature.properties.Start_Date),
                     color: "#000",
-                    weight: getWeight(feature.properties.cluster_recruitment),
+                    weight: getWeight(feature.properties.dir_schGrant),
                     opacity: 1,
                     fillOpacity: 1
                 });
                        
                 marker.bindPopup( '<font size = "2">' + "District: " + feature.properties.district + '</font>' + 
-                                  '<br>' + 
+                                  '<br>' + stateName(feature.properties.State) + 
+                                  '<br />' + 
                                   '<b><br />' + "Start Date: " + feature.properties.Start_Date + '</b>' + 
-                                  '<b><br />' + "Cluster Recruited: " + yesNo(feature.properties.cluster_recruitment) + '</b>' + 
+                                  '<b><br />' + "Grant Awarded: " + yesNo(feature.properties.dir_schGrant) + '</b>' + 
+                                  '<br />' + "Cluster Recruited: " + yesNo(feature.properties.cluster_recruitment) + 
                                   '<br />' + "Full Implementer: " + yesNo(feature.properties.full_implementer));
                 marker.on('mouseover', function (e) {
             this.openPopup();
@@ -113,18 +213,26 @@ var yearLegend = L.control({position: 'bottomright'});
 yearLegend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info yearLegend'),
-        grades = ["2010","2011+","2011","2012+","2012"],
+        grades = ["2010","2011","2012","2013"],  // to include 2011+ and 2013+ in the legend ADD THEM HERE
         labels = [];
 
     // loop through our intervals and generate a label with a colored circle for each interval
     div.innerHTML +='<b>' + 'Start Year' + '</b><br>';
-    for (var i = 0; i < grades.length; i++) {
+    for (var i = 0; i < grades.length -1; i++) {
         div.innerHTML +=
-            '<i style="background:' + yearColor(grades[i]) + '"></i> ' +
-            grades[i];
+            '<i style="background:' + yearColorShort(grades[i]) + '"></i> ' +
+            grades[i] + '<br>';
     }
-    div.innerHTML += '<br>' + '&nbsp' + '&nbsp' + '&uarr;' +
-                     '<br><small>' + 'Cluster recruited' + '</small>';
+
+    //add bold outline to last year to represent 'Received grant'
+    for (var c = grades.length -1; c < grades.length; c++) {
+        div.innerHTML +=
+            '<c style="background:' + yearColorShort(grades[i])  + '"></c> ' +
+            grades[i] + '<br>';
+    }
+
+    div.innerHTML +=  '&nbsp' + '&nbsp' + '&uarr;' + 
+                     '<br><small>' + 'Received grant' + '</small>';
 
     return div;
 };
@@ -133,16 +241,21 @@ yearLegend.onAdd = function (map) {
 yearLegend.addTo(map);
 
 
+
+
+
 ////CHOROPLETH Part
 
 function choroColor(d) {
     console.log(d);
-    return d == '0'   ? '#fff' :
-           d <  '1'   ? '#969696' :
-           d <  '2'   ? '#cccccc' :
-           d <  '20'  ? '#f7f7f7' :
-                        '#FFC0CB' ;
+    return d <=  '1'   ? '#252525' :
+           d <=  '2'   ? '#636363' :
+           d <=  '3'   ? '#969696' :
+           d <=  '4'   ? '#cccccc' :
+                        '#f7f7f7' ;
 }
+
+
 
 function styleChoro(feature) {
     return {
@@ -164,21 +277,38 @@ var choroLegend = L.control({position: 'bottomright'});
 choroLegend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info choroLegend'),
-        grades = [0,1,2],
+        grades = [0,1,2,3,4],
         labels = [];
 
     // loop through our intervals and generate a label with a colored square for each interval
-    div.innerHTML +='<b>' + 'Poverty Rate' + '</b><br>';
+    div.innerHTML +='<b>' + 'Poverty Scale' + '</b><br>';
     for (var i = 0; i < grades.length; i++) {
         div.innerHTML +=
-            '<i style="background:' + choroColor(grades[i] + .5) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            // '<i style="background:' + choroColor(grades[i] + .5) + '"></i> ' +
+            // grades[i]+'01' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1] + '00%' + '<br>' : '~~~');
+               '<i style="background:' + choroColor(grades[i] + .5) + '"></i> ' +
+            (grades[i+1] ? grades[i]+'01' + ' &ndash; ' + grades[i + 1] + '00%' + '<br>' : '>' + grades[i] + '00%');
     }
 
     return div;
 };
 
 choroLegend.addTo(map);
+
+
+
+//Choropleth Outline
+function styleOutline(feature) {
+    return {
+        weight: 3,
+        opacity: 1,
+        color: 'black',
+        dashArray: '3',
+        fillOpacity: 0
+    };
+}
+
+L.geoJson(tractOutline, {style: styleOutline}).addTo(map);
 
 
 

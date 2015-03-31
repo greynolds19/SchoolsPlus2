@@ -132,7 +132,7 @@ body,html {
     background: rgba(255,255,255,1);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
-    width: 95px;
+    width: 130px; /*was 110*/
 }
 .info h4 {
     margin: 0 0 5px;
@@ -150,18 +150,35 @@ body,html {
     float: left;
     margin-right: 8px;
     opacity: 0.7;
-}
 
+    /*I would like to add an outline consistent with the map here, but it is tough*/
+    /*because a white outline show up outside the box and is not visible*/
+    /*maybe i can do a two colored dash outline (one color white, one the color of the box)*/
+    /*border: 1px black solid;*/
+}
 /*year LEGEND*/
 .yearLegend {
     line-height: 24px;
     color: #555;
 }
 .yearLegend i {
-    width: 24px;
-    height: 24px;
+    width: 22px; 
+    height: 22px;
+    float: left;
+    margin-right: 8px;
+    /*margin-bottom: 1px;*/
+    opacity: 0.7;
+    border-radius: 50%; /*border radius is half of width/height so it's a circle*/
+    border: 1px black solid;
+}
+
+/*refers to the circle that has bold outline for received grant*/
+.yearLegend c {
+    width: 16px; 
+    height: 16px;
     float: left;
     margin-right: 8px;
     opacity: 0.7;
-    border-radius: 12px;
+    border-radius: 50%; /*border radius is half of width/height so it's a circle*/
+    border: 4px #000 solid;
 }
